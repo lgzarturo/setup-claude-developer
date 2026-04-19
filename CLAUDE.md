@@ -1,10 +1,13 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Purpose
 
-Interactive setup scripts that scaffold a Claude Code + OpenCode developer environment in any project. Two equivalent scripts — `setup.sh` (Linux/macOS bash) and `setup.ps1` (Windows PowerShell) — must stay in sync.
+Interactive setup scripts that scaffold a Claude Code + OpenCode developer
+environment in any project. Two equivalent scripts — `setup.sh` (Linux/macOS
+bash) and `setup.ps1` (Windows PowerShell) — must stay in sync.
 
 ## Running the Scripts
 
@@ -16,7 +19,8 @@ bash setup.sh
 .\setup.ps1
 ```
 
-Both scripts are interactive: prompt user to select stacks (1–6), then generate files under `.claude/` and `.opencode/`.
+Both scripts are interactive: prompt user to select stacks (1–6), then generate
+files under `.claude/` and `.opencode/`.
 
 ## Architecture
 
@@ -88,11 +92,16 @@ Agent instructions here.
 
 ## Known Bug in setup.sh
 
-`create_skill` uses a heredoc with `'SKILL'` (single-quoted, no expansion), so `$content` is written literally instead of expanded. The PowerShell version works correctly. Any fix must use `printf '%s' "$content"` or `echo "$content"` instead of heredoc.
+`create_skill` uses a heredoc with `'SKILL'` (single-quoted, no expansion), so
+`$content` is written literally instead of expanded. The PowerShell version
+works correctly. Any fix must use `printf '%s' "$content"` or `echo "$content"`
+instead of heredoc.
 
 ## Sync Rule
 
-Every skill, agent, and command created under `.claude/` must be mirrored to `.opencode/`. Both scripts copy files identically — keep this behavior when adding new stacks or skills.
+Every skill, agent, and command created under `.claude/` must be mirrored to
+`.opencode/`. Both scripts copy files identically — keep this behavior when
+adding new stacks or skills.
 
 ## Approach
 

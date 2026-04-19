@@ -3,7 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -17,9 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Script interactivo bash** (`setup-claude-project.sh`) para Linux/macOS.
-- **Script interactivo PowerShell** (`setup-claude-project.ps1`) para Windows 11.
-- **Makefile** con comandos para instalar, ejecutar, actualizar y gestionar el script.
-- **Skills universales**: `testing-tdd`, `security`, `code-review`, `testing-coverage`.
+- **Script interactivo PowerShell** (`setup-claude-project.ps1`) para
+  Windows 11.
+- **Makefile** con comandos para instalar, ejecutar, actualizar y gestionar el
+  script.
+- **Skills universales**: `testing-tdd`, `security`, `code-review`,
+  `testing-coverage`.
 - **Skills por stack**:
   - `spring-boot-kotlin-rest` - Spring Boot 3.4+ con Kotlin
   - `python-django-uv` - Django con UV package manager
@@ -48,5 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `.prettierrc` configuración de Prettier.
 - `.vscode/settings.json` y `.vscode/extensions.json` para VS Code.
 
-[Unreleased]: https://github.com/lgzarturo/setup-claude-developer/compare/v1.0.0...HEAD
+[Unreleased]:
+  https://github.com/lgzarturo/setup-claude-developer/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/lgzarturo/setup-claude-developer/releases/tag/v1.0.0

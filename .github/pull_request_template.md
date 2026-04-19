@@ -1,6 +1,7 @@
 ## Descripción
 
-Resumen de los cambios y qué issue resuelve. Incluye motivación y contexto relevante.
+Resumen de los cambios y qué issue resuelve. Incluye motivación y contexto
+relevante.
 
 Cierra # (issue)
 
@@ -23,7 +24,8 @@ Cierra # (issue)
 
 ### Descripción detallada
 
-Explica los cambios con el nivel de detalle necesario para que el revisor los entienda.
+Explica los cambios con el nivel de detalle necesario para que el revisor los
+entienda.
 
 ## Testing
 
@@ -49,7 +51,8 @@ Explica los cambios con el nivel de detalle necesario para que el revisor los en
 - [ ] Todos los archivos generados se crean correctamente
 - [ ] Los skills tienen el formato correcto
 - [ ] Probado en múltiples stacks (si aplica)
-- [ ] Probado con las tres opciones de herramienta (solo Claude / solo OpenCode / ambas)
+- [ ] Probado con las tres opciones de herramienta (solo Claude / solo OpenCode
+      / ambas)
 
 ### Salida de las pruebas
 
@@ -67,7 +70,8 @@ Pega aquí la salida relevante de las pruebas
 
 ### Sincronización (obligatorio para cambios en los scripts)
 
-- [ ] Los cambios están sincronizados entre `setup-claude-project.sh` y `setup-claude-project.ps1`
+- [ ] Los cambios están sincronizados entre `setup-claude-project.sh` y
+      `setup-claude-project.ps1`
 - [ ] Ambos scripts producen la misma estructura de archivos
 - [ ] El contenido de los skills es idéntico en ambos scripts
 
@@ -78,12 +82,14 @@ Pega aquí la salida relevante de las pruebas
 
 ### Commits
 
-- [ ] Mis commits siguen el formato convencional (`feat:`, `fix:`, `docs:`, etc.)
+- [ ] Mis commits siguen el formato convencional (`feat:`, `fix:`, `docs:`,
+      etc.)
 - [ ] Hice squash de commits intermedios si fue necesario
 
 ## Notas adicionales
 
-Limitaciones conocidas, mejoras futuras o cualquier otro detalle relevante para el revisor.
+Limitaciones conocidas, mejoras futuras o cualquier otro detalle relevante para
+el revisor.
 
 ## Issues / PRs relacionados
 

@@ -4,7 +4,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
-  "editor.rulers": [100],
+  "editor.rulers": [80, 100],
   "editor.renderWhitespace": "boundary",
 
   // ── Archivos ────────────────────────────────────────────────────────────
@@ -52,7 +52,7 @@
   },
   "markdownlint.config": {
     "MD013": {
-      "line_length": 120,
+      "line_length": 80,
       "heading_line_length": 80,
       "code_block_line_length": 120,
       "tables": false

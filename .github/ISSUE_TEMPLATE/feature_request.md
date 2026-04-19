@@ -12,8 +12,8 @@ Descripción clara y concisa de lo que quieres que se implemente.
 
 ## Problema que resuelve
 
-¿Tu solicitud está relacionada con algún problema? Descríbelo.
-Ejemplo: _Siempre es difícil cuando [...]_
+¿Tu solicitud está relacionada con algún problema? Descríbelo. Ejemplo: _Siempre
+es difícil cuando [...]_
 
 ## Solución propuesta
 
@@ -76,6 +76,7 @@ license: MIT
 
 ## Checklist
 
-- [ ] Busqué en los issues existentes y esta funcionalidad no ha sido solicitada antes
+- [ ] Busqué en los issues existentes y esta funcionalidad no ha sido solicitada
+      antes
 - [ ] Consideré si esto está alineado con los objetivos del proyecto
 - [ ] Proporcioné suficiente detalle para que la idea sea comprensible

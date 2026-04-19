@@ -1,6 +1,8 @@
 # Setup Claude Project
 
-Scripts interactivos para configurar automáticamente un entorno de desarrollo con **Claude Code** y/o **OpenCode** en cualquier proyecto. Generan skills, agentes y comandos personalizados según el stack tecnológico que elijas.
+Scripts interactivos para configurar automáticamente un entorno de desarrollo
+con **Claude Code** y/o **OpenCode** en cualquier proyecto. Generan skills,
+agentes y comandos personalizados según el stack tecnológico que elijas.
 
 ---
 
@@ -19,7 +21,8 @@ cd /ruta/a/tu/proyecto
 setup-claude-project
 ```
 
-> Si `setup-claude-project` no se reconoce después de instalar, añade `~/.local/bin` a tu PATH:
+> Si `setup-claude-project` no se reconoce después de instalar, añade
+> `~/.local/bin` a tu PATH:
 >
 > ```bash
 > echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
@@ -60,7 +63,8 @@ make help        Muestra esta ayuda
 
 #### Instalación global
 
-La instalación global te permite ejecutar `setup-claude-project` desde cualquier directorio:
+La instalación global te permite ejecutar `setup-claude-project` desde cualquier
+directorio:
 
 ```bash
 # Desde el directorio del repositorio clonado
@@ -103,7 +107,8 @@ make uninstall
 
 ## Qué genera el script
 
-Al ejecutarlo, el script te hace tres preguntas y genera la estructura correspondiente:
+Al ejecutarlo, el script te hace tres preguntas y genera la estructura
+correspondiente:
 
 ### 1. Herramienta a configurar
 
@@ -131,7 +136,8 @@ Al ejecutarlo, el script te hace tres preguntas y genera la estructura correspon
 ¿Instalar las 18 skills oficiales de Spring Boot? (s/N)
 ```
 
-Clona e instala automáticamente el paquete de skills desde el repositorio oficial.
+Clona e instala automáticamente el paquete de skills desde el repositorio
+oficial.
 
 ---
 
@@ -197,7 +203,8 @@ Reinicia Claude Code u OpenCode después de instalar. Luego:
 | Linux/macOS | Bash, `make`, `git` (para 18 skills de Spring Boot)    |
 | Windows     | PowerShell 5.1+, `git` (para 18 skills de Spring Boot) |
 
-**Recomendado:** [Claude Code](https://claude.ai/code) y/o [OpenCode](https://opencode.ai) instalados.
+**Recomendado:** [Claude Code](https://claude.ai/code) y/o
+[OpenCode](https://opencode.ai) instalados.
 
 ---
 

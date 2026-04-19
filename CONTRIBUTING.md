@@ -1,12 +1,14 @@
 # Contributing to Setup Claude + OpenCode Developer Environment
 
-¡Gracias por tu interés en contribuir a este proyecto! Este documento proporciona las pautas para contribuir de manera efectiva.
+¡Gracias por tu interés en contribuir a este proyecto! Este documento
+proporciona las pautas para contribuir de manera efectiva.
 
 ---
 
 ## 📋 Código de Conducta
 
-Este proyecto se adhiere a un código de conducta que esperamos que todos los contribuyentes sigan:
+Este proyecto se adhiere a un código de conducta que esperamos que todos los
+contribuyentes sigan:
 
 - Sé respetuoso y constructivo en todas las interacciones
 - Acepta críticas constructivas con gracia
@@ -19,7 +21,9 @@ Este proyecto se adhiere a un código de conducta que esperamos que todos los co
 
 ### Reportar Bugs
 
-Si encuentras un bug, por favor abre un [issue](https://github.com/lgzarturo/setup-claude-developer/issues) con la siguiente información:
+Si encuentras un bug, por favor abre un
+[issue](https://github.com/lgzarturo/setup-claude-developer/issues) con la
+siguiente información:
 
 1. **Título claro y descriptivo**
 2. **Pasos para reproducir** el bug
@@ -56,7 +60,8 @@ Si aplica, añade screenshots para ayudar a explicar el problema.
 
 Para sugerir nuevas características o mejoras:
 
-1. Abre un [issue](https://github.com/lgzarturo/setup-claude-developer/issues) con el label `enhancement`
+1. Abre un [issue](https://github.com/lgzarturo/setup-claude-developer/issues)
+   con el label `enhancement`
 2. Describe la característica y el problema que resuelve
 3. Explica por qué sería útil para otros usuarios
 4. Si es posible, incluye ejemplos de uso
@@ -65,7 +70,8 @@ Para sugerir nuevas características o mejoras:
 
 Para proponer un nuevo stack tecnológico:
 
-1. Abre un [issue](https://github.com/lgzarturo/setup-claude-developer/issues) con el label `new-stack`
+1. Abre un [issue](https://github.com/lgzarturo/setup-claude-developer/issues)
+   con el label `new-stack`
 2. Incluye la siguiente información:
    - **Nombre del stack**: Ej., "Ruby on Rails"
    - **Versión recomendada**: Ej., "Rails 7+"
@@ -92,7 +98,8 @@ Para proponer un nuevo stack tecnológico:
 
 #### Flujo de Trabajo
 
-1. Realiza tus cambios siguiendo las [Convenciones de Código](#convenciones-de-código)
+1. Realiza tus cambios siguiendo las
+   [Convenciones de Código](#convenciones-de-código)
 2. **Prueba** tus cambios en diferentes sistemas operativos si es posible
 3. **Documenta** cualquier cambio en el README.md si es necesario
 4. Haz **commit** de tus cambios:
@@ -177,7 +184,8 @@ license: MIT
 
 #### Mensajes de Commit
 
-Seguimos una versión simplificada de [Conventional Commits](https://www.conventionalcommits.org/):
+Seguimos una versión simplificada de
+[Conventional Commits](https://www.conventionalcommits.org/):
 
 - `feat:` Nueva característica
 - `fix:` Corrección de bug
@@ -200,7 +208,9 @@ refactor: simplifica función create_skill en bash
 
 ## 🔄 Sincronización entre Scripts
 
-Una regla importante de este proyecto es mantener los dos scripts (`setup.sh` y `setup.ps1`) **sincronizados**. Si haces cambios en uno, debes aplicarlos al otro.
+Una regla importante de este proyecto es mantener los dos scripts (`setup.sh` y
+`setup.ps1`) **sincronizados**. Si haces cambios en uno, debes aplicarlos al
+otro.
 
 ### Checklist de Sincronización
 
@@ -248,11 +258,13 @@ Antes de enviar tu PR, verifica:
 
 ### ¿Cuánto tiempo tardan en revisar los PRs?
 
-Intentamos revisar los PRs dentro de 3-5 días hábiles. PRs más grandes pueden requerir más tiempo.
+Intentamos revisar los PRs dentro de 3-5 días hábiles. PRs más grandes pueden
+requerir más tiempo.
 
 ### ¿Puedo añadir mi propio stack si es muy específico?
 
-Prefierimos stacks que tengan uso generalizado. Para stacks muy específicos, considera crear un fork o mantenerlo en tu propio repositorio.
+Prefierimos stacks que tengan uso generalizado. Para stacks muy específicos,
+considera crear un fork o mantenerlo en tu propio repositorio.
 
 ---
 
@@ -260,12 +272,14 @@ Prefierimos stacks que tengan uso generalizado. Para stacks muy específicos, co
 
 - **GitHub Issues**: Para bugs y features
 - **GitHub Discussions**: Para preguntas y discusiones generales
-- **Email**: Puedes encontrar el contacto en el perfil de [Arturo López](https://github.com/lgzarturo)
+- **Email**: Puedes encontrar el contacto en el perfil de
+  [Arturo López](https://github.com/lgzarturo)
 
 ---
 
 ## 🎉 Reconocimientos
 
-Todas las contribuciones serán reconocidas en el archivo [AUTHORS](AUTHORS) o en la sección de contribuyentes del README.
+Todas las contribuciones serán reconocidas en el archivo [AUTHORS](AUTHORS) o en
+la sección de contribuyentes del README.
 
 ¡Gracias por hacer de este proyecto algo mejor! 🚀

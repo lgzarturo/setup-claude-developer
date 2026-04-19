@@ -12,8 +12,7 @@ tiempo proteger los derechos de autor y la intención pedagógica del material.
 - Todo el código fuente, textos, diagramas, ejemplos, ejercicios y documentación
   aquí publicados son propiedad del autor.
   - Autor: Arturo López — contacto: lgzarturo@gmail.com
-- Este repositorio se publica bajo la licencia
-  [MIT License](LICENSE).
+- Este repositorio se publica bajo la licencia [MIT License](LICENSE).
   - Se permite usar, adaptar y compartir el contenido siempre que se otorgue la
     atribución adecuada.
   - La atribución también aplica al uso de la metodología y estructura didáctica
