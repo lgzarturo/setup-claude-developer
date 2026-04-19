@@ -71,6 +71,26 @@ function Create-Skill {
     Write-Host "✓ Skill creado: $name" -ForegroundColor Green
 }
 
+# ====================== FUNCIÓN PARA CREAR COMANDO ======================
+function Create-Command {
+    param([string]$name, [string]$content)
+
+    foreach ($t in $targets) {
+        Set-Content -Path ".$t/commands/$name.md" -Value $content -Encoding UTF8
+    }
+    Write-Host "✓ Comando creado: /$name" -ForegroundColor Green
+}
+
+# ====================== FUNCIÓN PARA CREAR AGENTE ======================
+function Create-Agent {
+    param([string]$name, [string]$content)
+
+    foreach ($t in $targets) {
+        Set-Content -Path ".$t/agents/$name.md" -Value $content -Encoding UTF8
+    }
+    Write-Host "✓ Agente creado: $name" -ForegroundColor Green
+}
+
 # ====================== SKILLS UNIVERSALES ======================
 Create-Skill -name "testing-tdd" -content @'
 ---
@@ -257,8 +277,8 @@ license: MIT
 '@
 }
 
-# ====================== AGENTE ======================
-$agentContent = @'
+# ====================== AGENTES ======================
+Create-Agent -name "code-reviewer" -content @'
 ---
 description: Revisa código por calidad y mejores prácticas
 mode: subagent
@@ -273,13 +293,43 @@ tools:
 Proporciona feedback constructivo sin hacer cambios directos. Usa el skill code-review cuando sea necesario.
 '@
 
-foreach ($t in $targets) {
-    Set-Content -Path ".$t/agents/code-reviewer.md" -Value $agentContent -Encoding UTF8
-}
-Write-Host "✓ Agente creado: code-reviewer" -ForegroundColor Green
+Create-Agent -name "release-manager" -content @'
+---
+description: Agente especializado en gestión de releases, changelog y versioning semántico
+mode: subagent
+model: anthropic/claude-sonnet-4-20250514
+temperature: 0.1
+tools:
+  write: true
+  edit: true
+  bash:
+    "git *": "ask"
+    "gh *": "ask"
+---
 
-# ====================== COMANDO ======================
-$cmdContent = @'
+Eres el Release Manager. Siempre usa Conventional Commits, Keep a Changelog y Semantic Versioning.
+Coordina con los skills @testing-coverage, @code-review y los comandos /update-changelog y /bump-version.
+Nunca hagas cambios sin confirmar con el usuario.
+'@
+
+Create-Agent -name "git-workflow" -content @'
+---
+description: Agente experto en git, conventional commits, branching y PRs
+mode: subagent
+model: anthropic/claude-sonnet-4-20250514
+temperature: 0.2
+tools:
+  bash:
+    "git *": "allow"
+    "gh pr *": "ask"
+---
+
+Maneja todo el workflow de git: branch creation, conventional commits, rebase, PR description.
+Siempre sigue Conventional Commits y sugiere comandos seguros.
+'@
+
+# ====================== COMANDOS ======================
+Create-Command -name "run-all-tests" -content @'
 ---
 description: Ejecuta todos los tests del proyecto (usa skill testing-tdd)
 ---
@@ -288,10 +338,194 @@ description: Ejecuta todos los tests del proyecto (usa skill testing-tdd)
 # Usa el skill @testing-tdd si es necesario
 '@
 
-foreach ($t in $targets) {
-    Set-Content -Path ".$t/commands/run-all-tests.md" -Value $cmdContent -Encoding UTF8
-}
-Write-Host "✓ Comando creado: run-all-tests" -ForegroundColor Green
+Create-Command -name "conventional-commit" -content @'
+---
+description: Analiza git staging (git add .) y crea un commit siguiendo Conventional Commits (feat, fix, chore, etc.)
+---
+
+Analiza exactamente los cambios en el staging (`git diff --staged` y `git status`).
+Genera un mensaje de commit que siga el estándar Conventional Commits:
+- feat: nueva funcionalidad → minor
+- fix: corrección de bug → patch
+- chore: mantenimiento, docs, refactor → sin bump
+- breaking change: usa "BREAKING CHANGE:" en el body → major
+
+Formato exacto:
+<type>(<scope opcional>): <título corto y descriptivo>
+<línea en blanco>
+<body detallado si es necesario>
+<línea en blanco>
+BREAKING CHANGE: (solo si aplica)
+
+Después de generar el mensaje, muéstramelo y pregúntame si quiero que ejecutes `git commit -m "mensaje"` automáticamente.
+Nunca hagas el commit sin mi confirmación explícita.
+'@
+
+Create-Command -name "update-changelog" -content @'
+---
+description: Actualiza CHANGELOG.md con los commits recientes siguiendo formato Conventional Commits + Keep a Changelog
+---
+
+Lee los commits desde el último tag (`git log --oneline $(git describe --tags --abbrev=0 2>/dev/null || echo "")..HEAD`).
+Agrúpalos por tipo (Added, Changed, Fixed, etc.).
+Actualiza o crea CHANGELOG.md en la raíz siguiendo el formato Keep a Changelog (https://keepachangelog.com).
+Mantén la sección "Unreleased" primero y añade una nueva sección con la fecha de hoy.
+Usa el skill @code-review si necesitas validar el formato.
+'@
+
+Create-Command -name "bump-version" -content @'
+---
+description: Detecta bump semántico (major/minor/patch) desde commits o según instrucción del usuario y actualiza versión
+---
+
+Detecta el tipo de proyecto:
+- package.json → Next.js / Astro / TypeScript
+- pyproject.toml → Python + UV (Django o FastAPI)
+- build.gradle.kts o pom.xml → Spring Boot + Kotlin
+
+Analiza commits desde el último tag para inferir el bump (feat = minor, fix = patch, BREAKING CHANGE = major).
+Si el usuario indica explícitamente "major", "minor" o "patch", respeta eso.
+Actualiza la versión en el archivo correspondiente.
+Crea un commit con mensaje "chore: bump version to vX.Y.Z"
+Crea un tag anotado: git tag -a vX.Y.Z -m "Release vX.Y.Z"
+Pregúntame antes de ejecutar cualquier git command.
+'@
+
+Create-Command -name "up-version-patch" -content @'
+---
+description: Aumenta la versión en patch (1.2.3 → 1.2.4)
+---
+
+Ejecuta bump de versión patch.
+Actualiza el archivo correspondiente (package.json, pyproject.toml, build.gradle.kts, etc.).
+Crea commit "chore: bump version to vX.Y.Z" y tag anotado.
+Pregúntame antes de ejecutar cualquier git command.
+'@
+
+Create-Command -name "up-version-minor" -content @'
+---
+description: Aumenta la versión en minor (1.2.3 → 1.3.0)
+---
+
+Ejecuta bump de versión minor.
+Actualiza el archivo correspondiente (package.json, pyproject.toml, build.gradle.kts, etc.).
+Crea commit "chore: bump version to vX.Y.Z" y tag anotado.
+Pregúntame antes de ejecutar cualquier git command.
+'@
+
+Create-Command -name "up-version-major" -content @'
+---
+description: Aumenta la versión en major (1.2.3 → 2.0.0)
+---
+
+Ejecuta bump de versión major (incluye breaking changes).
+Actualiza el archivo correspondiente (package.json, pyproject.toml, build.gradle.kts, etc.).
+Crea commit "chore: bump version to vX.Y.Z" y tag anotado.
+Pregúntame antes de ejecutar cualquier git command.
+'@
+
+Create-Command -name "create-pr" -content @'
+---
+description: Crea un Pull Request en GitHub con título, descripción y labels basados en los cambios
+---
+
+Analiza los cambios en la rama actual (`git diff main...HEAD` o rama base).
+Genera:
+- Título siguiendo Conventional Commits
+- Descripción completa con:
+  - ¿Qué cambia?
+  - ¿Por qué?
+  - Breaking changes (si aplica)
+  - Cómo probarlo
+- Labels automáticas (feat, fix, chore, breaking, etc.)
+
+Usa `gh pr create` para crear el PR.
+Pregúntame antes de ejecutar cualquier comando que modifique GitHub.
+'@
+
+Create-Command -name "lint-all" -content @'
+---
+description: Ejecuta linting completo según el stack del proyecto (Kotlin, Python, TypeScript, Astro)
+---
+
+Detecta el stack del proyecto y ejecuta el linter correspondiente:
+- Spring Boot + Kotlin → ./gradlew ktlintCheck o detekt
+- Python + UV (Django/FastAPI) → uv run ruff check . --fix
+- Next.js / TypeScript → npm run lint o eslint .
+- Astro → npm run lint
+
+Muestra solo los errores y sugerencias importantes.
+Al final, sugiere ejecutar /format-all si es necesario.
+'@
+
+Create-Command -name "format-all" -content @'
+---
+description: Formatea todo el código según las reglas del proyecto (ktlint, ruff, prettier, etc.)
+---
+
+Detecta el stack y ejecuta el formateador:
+- Kotlin → ./gradlew ktlintFormat
+- Python → uv run ruff format . && uv run ruff check --fix
+- Next.js / TypeScript / Astro → npm run format
+
+Ejecuta el comando correspondiente y muestra un resumen de archivos modificados.
+'@
+
+Create-Command -name "deploy-preview" -content @'
+---
+description: Crea un deployment de preview para el entorno actual (Vercel, Netlify, Railway, etc.)
+---
+
+Detecta el tipo de proyecto:
+- Next.js / Astro → Vercel / Netlify preview
+- Spring Boot → Railway preview
+- Python (FastAPI/Django) → Railway o Fly.io
+
+Ejecuta el comando de preview correspondiente y dame el enlace del deployment.
+Si no está configurado, dame los pasos para configurarlo.
+'@
+
+Create-Command -name "release" -content @'
+---
+description: Ejecuta el flujo completo de release: commit convencional + changelog + bump versión + tag + PR
+---
+
+Ejecuta en este orden (con confirmación en cada paso):
+1. /conventional-commit
+2. /update-changelog
+3. /bump-version (pregunta si major/minor/patch o detecta automáticamente)
+4. git push && git push --tags
+5. /create-pr (opcional)
+
+Al final, resume todo lo realizado.
+'@
+
+Create-Command -name "update-claude" -content @'
+---
+description: Actualiza o recrea el archivo CLAUDE.md con la versión ultra-eficiente más reciente
+---
+
+Sobrescribe CLAUDE.md con este contenido optimizado:
+
+```markdown
+# Approach
+
+- Think before acting. Read existing files before writing code.
+- Be concise in output but thorough in reasoning.
+- Prefer editing over rewriting whole files.
+- Do not re-read files you have already read unless the file may have changed.
+- Skip files over 100KB unless explicitly required.
+- Suggest running /cost when a session is running long to monitor cache ratio.
+- Recommend starting a new session when switching to an unrelated task.
+- Test your code before declaring done.
+- No sycophantic openers or closing fluff.
+- Keep solutions simple and direct.
+- User instructions always override this file.
+- When using tools, be precise and minimal with context.
+```
+
+Confirma antes de sobrescribir y muestra las diferencias si ya existía.
+'@
 
 # ====================== FINAL ======================
 $targetDirs = ($targets | ForEach-Object { ".$_" }) -join " y "

@@ -22,7 +22,7 @@ flujo de desarrollo y planeación.
 ## Commands Disponibles
 
 > **Estado:** Implementados ✅  
-> **Total:** 1 command
+> **Total:** 14 commands
 
 ### 1. `run-all-tests`
 
@@ -68,6 +68,161 @@ description: Ejecuta todos los tests del proyecto (usa skill testing-tdd)
 - Porcentaje de cobertura
 - Reporte de tests fallidos (si aplica)
 - Recomendaciones para mejorar cobertura
+
+---
+
+### 2. `conventional-commit`
+
+**Descripción:** Analiza git staging y genera mensaje de commit siguiendo Conventional Commits
+
+**Funcionalidad:**
+
+- Analiza `git diff --staged` y `git status`
+- Detecta tipo automáticamente: `feat`, `fix`, `chore`, `docs`, `refactor`
+- Incluye `BREAKING CHANGE:` cuando aplica
+- Muestra el mensaje y pide confirmación antes de ejecutar `git commit`
+
+**Uso:** `/conventional-commit`
+
+---
+
+### 3. `update-changelog`
+
+**Descripción:** Actualiza CHANGELOG.md desde commits recientes siguiendo Keep a Changelog
+
+**Funcionalidad:**
+
+- Lee commits desde el último tag
+- Agrupa por tipo: Added, Changed, Fixed, Removed
+- Mantiene sección "Unreleased" primero
+- Sigue formato [keepachangelog.com](https://keepachangelog.com)
+
+**Uso:** `/update-changelog`
+
+---
+
+### 4. `bump-version`
+
+**Descripción:** Detecta bump semántico y actualiza versión en el archivo del stack
+
+**Funcionalidad:**
+
+- Detecta `package.json`, `pyproject.toml`, `build.gradle.kts` / `pom.xml`
+- Infiere bump desde commits: `feat` = minor, `fix` = patch, `BREAKING CHANGE` = major
+- Crea commit `chore: bump version to vX.Y.Z` y tag anotado
+- Siempre pide confirmación antes de ejecutar git commands
+
+**Uso:** `/bump-version`
+
+---
+
+### 5. `up-version-patch`
+
+**Descripción:** Shortcut para bump patch (1.2.3 → 1.2.4)
+
+**Uso:** `/up-version-patch`
+
+---
+
+### 6. `up-version-minor`
+
+**Descripción:** Shortcut para bump minor (1.2.3 → 1.3.0)
+
+**Uso:** `/up-version-minor`
+
+---
+
+### 7. `up-version-major`
+
+**Descripción:** Shortcut para bump major con breaking changes (1.2.3 → 2.0.0)
+
+**Uso:** `/up-version-major`
+
+---
+
+### 8. `create-pr`
+
+**Descripción:** Crea Pull Request en GitHub con título, descripción y labels automáticos
+
+**Funcionalidad:**
+
+- Analiza `git diff main...HEAD`
+- Genera título con Conventional Commits, descripción completa y labels
+- Usa `gh pr create`; siempre pide confirmación
+
+**Uso:** `/create-pr`
+
+---
+
+### 9. `lint-all`
+
+**Descripción:** Linting completo según el stack detectado
+
+| Stack | Herramienta |
+|---|---|
+| Spring Boot + Kotlin | `./gradlew ktlintCheck` o `detekt` |
+| Python + UV | `uv run ruff check . --fix` |
+| Next.js / TypeScript / Astro | `npm run lint` o `eslint .` |
+
+**Uso:** `/lint-all`
+
+---
+
+### 10. `format-all`
+
+**Descripción:** Formatea todo el código según el stack
+
+| Stack | Herramienta |
+|---|---|
+| Kotlin | `./gradlew ktlintFormat` |
+| Python | `uv run ruff format . && uv run ruff check --fix` |
+| Next.js / TypeScript / Astro | `npm run format` |
+
+**Uso:** `/format-all`
+
+---
+
+### 11. `deploy-preview`
+
+**Descripción:** Crea deployment de preview (Vercel, Netlify, Railway, Fly.io)
+
+**Funcionalidad:**
+
+- Detecta plataforma según stack
+- Ejecuta comando de preview y retorna el enlace
+- Si no está configurado, da los pasos de setup
+
+**Uso:** `/deploy-preview`
+
+---
+
+### 12. `release`
+
+**Descripción:** Flujo completo de release en un solo comando
+
+**Secuencia con confirmación en cada paso:**
+
+1. `/conventional-commit`
+2. `/update-changelog`
+3. `/bump-version`
+4. `git push && git push --tags`
+5. `/create-pr` (opcional)
+
+**Uso:** `/release`
+
+---
+
+### 13. `update-claude`
+
+**Descripción:** Recrea CLAUDE.md con las reglas más optimizadas y token-eficientes
+
+**Funcionalidad:**
+
+- Sobrescribe CLAUDE.md con la versión actualizada
+- Muestra diff si ya existía y pide confirmación
+- Incluye regla adicional de precisión en uso de tools
+
+**Uso:** `/update-claude`
 
 ---
 
@@ -158,7 +313,7 @@ description: Genera un Architecture Decision Record (ADR)
 
 ### Fase 2: Desarrollo 🟡
 
-#### `/commit` ⏳
+#### `/conventional-commit` ✅
 
 **Prioridad:** Alta
 
@@ -202,7 +357,7 @@ feat(auth): implement JWT authentication
 
 ---
 
-#### `/create-pr` ⏳
+#### `/create-pr` ✅
 
 **Prioridad:** Alta
 
@@ -237,7 +392,7 @@ description: Crea un Pull Request con descripción generada automáticamente
 
 ---
 
-#### `/fix-linting` ⏳
+#### `/lint-all` ✅ · `/format-all` ✅
 
 **Prioridad:** Media
 
@@ -387,11 +542,11 @@ description: Construye imagen Docker optimizada
 
 ---
 
-#### `/deploy-staging` ⏳
+#### `/deploy-preview` ✅
 
 **Prioridad:** Baja
 
-**Descripción:** Despliega a ambiente de staging
+**Descripción:** Despliega a ambiente de preview/staging
 
 **Contenido propuesto:**
 
@@ -450,11 +605,11 @@ description: Inicia servidor local para documentación
 
 ---
 
-#### `/changelog` ⏳
+#### `/update-changelog` ✅ · `/release` ✅ · `/bump-version` ✅ · `/up-version-patch` ✅ · `/up-version-minor` ✅ · `/up-version-major` ✅ · `/update-claude` ✅
 
 **Prioridad:** Media
 
-**Descripción:** Genera o actualiza el CHANGELOG
+**Descripción:** Genera o actualiza el CHANGELOG · flujo completo de release · bump de versión semántica
 
 **Contenido propuesto:**
 
@@ -572,14 +727,23 @@ Los commands pueden ser:
 
 ## Checklist de Implementación
 
-### Commands Actuales (1 command)
+### Commands Actuales (14 commands)
 
-- [x] `/run-all-tests`
-  - [x] Detecta stack automáticamente
-  - [x] Ejecuta tests con cobertura
-  - [x] Usa skill `@testing-tdd`
+- [x] `/run-all-tests` — tests completos con cobertura, auto-detecta stack
+- [x] `/conventional-commit` — Conventional Commits desde git staging con confirmación
+- [x] `/update-changelog` — Keep a Changelog desde commits del último tag
+- [x] `/bump-version` — SemVer automático o manual, crea commit + tag
+- [x] `/up-version-patch` — shortcut bump patch
+- [x] `/up-version-minor` — shortcut bump minor
+- [x] `/up-version-major` — shortcut bump major
+- [x] `/create-pr` — PR en GitHub con título, descripción y labels automáticos
+- [x] `/lint-all` — linting completo auto-detecta stack
+- [x] `/format-all` — formato completo auto-detecta stack
+- [x] `/deploy-preview` — preview en Vercel / Netlify / Railway / Fly.io
+- [x] `/release` — flujo completo: commit → changelog → bump → push → PR
+- [x] `/update-claude` — recrea CLAUDE.md con versión más optimizada
 
-### Commands Recomendados (16 commands)
+### Commands Recomendados (pendientes)
 
 **Fase 1: Setup**
 
@@ -588,9 +752,6 @@ Los commands pueden ser:
 
 **Fase 2: Desarrollo**
 
-- [ ] `/commit` 🔴
-- [ ] `/create-pr` 🔴
-- [ ] `/fix-linting` 🟡
 - [ ] `/update-deps` 🟡
 
 **Fase 3: Testing**
@@ -602,13 +763,11 @@ Los commands pueden ser:
 **Fase 4: DevOps**
 
 - [ ] `/build-docker` 🟡
-- [ ] `/deploy-staging` 🟢
 - [ ] `/logs` 🟢
 
 **Fase 5: Documentación**
 
 - [ ] `/docs-serve` 🟢
-- [ ] `/changelog` 🟡
 
 ---
 

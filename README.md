@@ -208,6 +208,51 @@ Reinicia Claude Code u OpenCode después de instalar. Luego:
 
 ---
 
+## Recomendaciones para Desarrolladores
+
+> **Nota importante:** Para optimizar tu flujo de trabajo y reducir el consumo de
+tokens, te recomendamos leer el documento
+[docs/04-recomendaciones.md](docs/04-recomendaciones.md). Este documento
+complementario incluye herramientas y configuraciones adicionales que mejoran
+significativamente el performance:
+
+### Herramientas recomendadas
+
+| Herramienta | Beneficio | Ahorro de tokens |
+|-------------|-----------|------------------|
+| **RTK** | Compresión de outputs de bash | 60-90% |
+| **code-review-graph** | Grafo de conocimiento del codebase | 6.8x-49x menos tokens |
+| **token-savior** | Navegación por símbolo + memoria persistente | 97% menos tokens |
+| **caveman** | Respuestas concisas de Claude | ~75% menos tokens |
+| **CLAUDE.md optimizado** | Reglas anti-verbosidad (ya incluido) | ~63% menos tokens |
+
+### Por qué leer las recomendaciones
+
+El documento de recomendaciones te ayudará a:
+
+1. **Reducir costos:** Menos tokens = menos costo por sesión de desarrollo
+2. **Aumentar velocidad:** Claude procesa contexto más rápido con menos tokens
+3. **Mantener contexto:** Memoria persistente entre sesiones
+4. **Mejorar navegación:** Encontrar código relevante sin leer archivos completos
+5. **Respuestas directas:** Eliminar verbosidad innecesaria en las respuestas
+
+### Flujo recomendado
+
+```bash
+# 1. Configura tu proyecto con este script
+cd mi-proyecto
+setup-claude-project
+
+# 2. Lee y aplica las recomendaciones adicionales
+# Ver: docs/04-recomendaciones.md
+```
+
+> **Tip:** Las recomendaciones son especialmente valiosas si trabajas con
+proyectos grandes o sesiones de desarrollo extensas. La combinación de todas las
+herramientas puede reducir el consumo de tokens en un **85-95%**.
+
+---
+
 ## Troubleshooting
 
 **`setup-claude-project`: command not found**

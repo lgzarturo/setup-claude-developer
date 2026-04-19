@@ -22,7 +22,7 @@ planeación.
 ## Agents Disponibles
 
 > **Estado:** Implementados ✅  
-> **Total:** 1 agente
+> **Total:** 3 agentes
 
 ### 1. `code-reviewer`
 
@@ -59,6 +59,69 @@ tools:
 - Aislamiento de cambios (read-only)
 - Temperatura baja (0.1) = respuestas consistentes y deterministas
 - Enfocado únicamente en revisión, no en implementación
+
+---
+
+### 2. `release-manager`
+
+**Descripción:** Agente especializado en gestión de releases, changelog y versioning semántico
+
+**Configuración:**
+
+```yaml
+mode: subagent
+model: anthropic/claude-sonnet-4-20250514
+temperature: 0.1
+tools:
+  write: true
+  edit: true
+  bash:
+    "git *": "ask"
+    "gh *": "ask"
+```
+
+**Comportamiento:**
+
+- Siempre usa Conventional Commits, Keep a Changelog y Semantic Versioning
+- Coordina con `@testing-coverage`, `@code-review`, `/update-changelog` y `/bump-version`
+- **Nunca** ejecuta git commands sin confirmación del usuario
+
+**Casos de uso:**
+
+- "Prepara el release v2.0.0"
+- "Genera el changelog desde la última versión"
+- "Actualiza las versiones de todas las dependencias"
+
+---
+
+### 3. `git-workflow`
+
+**Descripción:** Agente experto en git, conventional commits, branching y PRs
+
+**Configuración:**
+
+```yaml
+mode: subagent
+model: anthropic/claude-sonnet-4-20250514
+temperature: 0.2
+tools:
+  bash:
+    "git *": "allow"
+    "gh pr *": "ask"
+```
+
+**Comportamiento:**
+
+- Ejecuta `git *` directamente (sin confirmación)
+- Requiere confirmación para operaciones de GitHub (`gh pr *`)
+- Siempre sigue Conventional Commits
+
+**Casos de uso:**
+
+- "Crea una branch para este feature"
+- "Genera el mensaje de commit para estos cambios"
+- "Haz rebase de esta rama sobre main"
+- "Crea el PR con descripción automática"
 
 ---
 
@@ -402,7 +465,7 @@ tools:
 
 ---
 
-#### `release-manager` ⏳
+#### `release-manager` ✅
 
 **Prioridad:** Baja
 
@@ -554,15 +617,23 @@ tools:
 
 ## Checklist de Implementación
 
-### Agents Actuales (1 agent)
+### Agents Actuales (3 agents)
 
 - [x] `code-reviewer`
   - [x] Configuración como subagent
   - [x] Temperatura 0.1
   - [x] Read-only (write/edit/bash: false)
   - [x] Integración con skill `@code-review`
+- [x] `release-manager`
+  - [x] Conventional Commits + Keep a Changelog + SemVer
+  - [x] Confirmación obligatoria para git/gh commands
+  - [x] Coordina con `/update-changelog` y `/bump-version`
+- [x] `git-workflow`
+  - [x] `git *` permitido directamente
+  - [x] `gh pr *` requiere confirmación
+  - [x] Branch, commit, rebase, PR description
 
-### Agents Recomendados (11 agents)
+### Agents Recomendados (9 agents pendientes)
 
 **Fase 1: Planeación**
 
