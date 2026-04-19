@@ -1,9 +1,9 @@
 # ================================================
 # Setup Claude + OpenCode - Windows 11 PowerShell
-# Version: 1.0.1
+# Version: 1.0.2
 # ================================================
 
-Write-Host "=== Setup Claude Project v1.0.1 ===" -ForegroundColor Cyan
+Write-Host "=== Setup Claude Project v1.0.2 ===" -ForegroundColor Cyan
 
 # ====================== SELECCIÓN DE HERRAMIENTA ======================
 Write-Host ""
@@ -40,7 +40,8 @@ foreach ($t in $targets) {
 
 # ====================== CLAUDE.md (solo si Claude está en targets) ======================
 if ($targets -contains "claude") {
-    $claudeContent = @'
+    $claudeApproach = @'
+
 # Approach
 
 - Think before acting. Read existing files before writing code.
@@ -55,8 +56,13 @@ if ($targets -contains "claude") {
 - Keep solutions simple and direct.
 - User instructions always override this file.
 '@
-    Set-Content -Path "CLAUDE.md" -Value $claudeContent -Encoding UTF8
-    Write-Host "✓ CLAUDE.md creado/actualizado" -ForegroundColor Green
+    $existingContent = if (Test-Path "CLAUDE.md") { Get-Content "CLAUDE.md" -Raw -Encoding UTF8 } else { "" }
+    if ($existingContent -notmatch "Think before acting") {
+        Add-Content -Path "CLAUDE.md" -Value $claudeApproach -Encoding UTF8
+        Write-Host "✓ CLAUDE.md actualizado con reglas de Approach" -ForegroundColor Green
+    } else {
+        Write-Host "✓ CLAUDE.md ya contiene las reglas de Approach (sin cambios)" -ForegroundColor Green
+    }
 }
 
 # ====================== FUNCIÓN PARA CREAR SKILL ======================
@@ -278,7 +284,23 @@ license: MIT
 }
 
 # ====================== AGENTES ======================
-Create-Agent -name "code-reviewer" -content @'
+# code-reviewer
+$codeReviewerOpencode = @'
+---
+description: Revisa código por calidad y mejores prácticas
+mode: subagent
+model: kimi-k2.5
+temperature: 0.1
+tools:
+  write: false
+  edit: false
+  bash: false
+---
+
+Proporciona feedback constructivo sin hacer cambios directos. Usa el skill code-review cuando sea necesario.
+'@
+
+$codeReviewerClaude = @'
 ---
 description: Revisa código por calidad y mejores prácticas
 mode: subagent
@@ -293,7 +315,34 @@ tools:
 Proporciona feedback constructivo sin hacer cambios directos. Usa el skill code-review cuando sea necesario.
 '@
 
-Create-Agent -name "release-manager" -content @'
+foreach ($t in $targets) {
+    if ($t -eq "opencode") {
+        Set-Content -Path ".$t/agents/code-reviewer.md" -Value $codeReviewerOpencode -Encoding UTF8
+    } else {
+        Set-Content -Path ".$t/agents/code-reviewer.md" -Value $codeReviewerClaude -Encoding UTF8
+    }
+}
+Write-Host "✓ Agente creado: code-reviewer" -ForegroundColor Green
+
+# release-manager
+$releaseManagerOpencode = @'
+---
+description: Agente especializado en gestión de releases, changelog y versioning semántico
+mode: subagent
+model: kimi-k2.5
+temperature: 0.1
+tools:
+  write: true
+  edit: true
+  bash: true
+---
+
+Eres el Release Manager. Siempre usa Conventional Commits, Keep a Changelog y Semantic Versioning.
+Coordina con los skills @testing-coverage, @code-review y los comandos /update-changelog y /bump-version.
+Nunca hagas cambios sin confirmar con el usuario.
+'@
+
+$releaseManagerClaude = @'
 ---
 description: Agente especializado en gestión de releases, changelog y versioning semántico
 mode: subagent
@@ -312,7 +361,31 @@ Coordina con los skills @testing-coverage, @code-review y los comandos /update-c
 Nunca hagas cambios sin confirmar con el usuario.
 '@
 
-Create-Agent -name "git-workflow" -content @'
+foreach ($t in $targets) {
+    if ($t -eq "opencode") {
+        Set-Content -Path ".$t/agents/release-manager.md" -Value $releaseManagerOpencode -Encoding UTF8
+    } else {
+        Set-Content -Path ".$t/agents/release-manager.md" -Value $releaseManagerClaude -Encoding UTF8
+    }
+}
+Write-Host "✓ Agente creado: release-manager" -ForegroundColor Green
+
+# git-workflow
+$gitWorkflowOpencode = @'
+---
+description: Agente experto en git, conventional commits, branching y PRs
+mode: subagent
+model: kimi-k2.5
+temperature: 0.2
+tools:
+  bash: true
+---
+
+Maneja todo el workflow de git: branch creation, conventional commits, rebase, PR description.
+Siempre sigue Conventional Commits y sugiere comandos seguros.
+'@
+
+$gitWorkflowClaude = @'
 ---
 description: Agente experto en git, conventional commits, branching y PRs
 mode: subagent
@@ -327,6 +400,15 @@ tools:
 Maneja todo el workflow de git: branch creation, conventional commits, rebase, PR description.
 Siempre sigue Conventional Commits y sugiere comandos seguros.
 '@
+
+foreach ($t in $targets) {
+    if ($t -eq "opencode") {
+        Set-Content -Path ".$t/agents/git-workflow.md" -Value $gitWorkflowOpencode -Encoding UTF8
+    } else {
+        Set-Content -Path ".$t/agents/git-workflow.md" -Value $gitWorkflowClaude -Encoding UTF8
+    }
+}
+Write-Host "✓ Agente creado: git-workflow" -ForegroundColor Green
 
 # ====================== COMANDOS ======================
 Create-Command -name "run-all-tests" -content @'
@@ -502,10 +584,13 @@ Al final, resume todo lo realizado.
 
 Create-Command -name "update-claude" -content @'
 ---
-description: Actualiza o recrea el archivo CLAUDE.md con la versión ultra-eficiente más reciente
+description: Actualiza el archivo CLAUDE.md agregando las reglas de approach si no existen
 ---
 
-Sobrescribe CLAUDE.md con este contenido optimizado:
+Lee el archivo CLAUDE.md y verifica si ya contiene las reglas de approach.
+Si el archivo no existe o no contiene estas reglas, las agrega al final usando append.
+
+Las reglas a verificar/agregar son:
 
 ```markdown
 # Approach
@@ -524,7 +609,8 @@ Sobrescribe CLAUDE.md con este contenido optimizado:
 - When using tools, be precise and minimal with context.
 ```
 
-Confirma antes de sobrescribir y muestra las diferencias si ya existía.
+NUNCA sobrescribas el archivo completo. Solo agrega el contenido faltante al final si no existe.
+Muestra un resumen de lo que se agregó o indica si todo ya estaba presente.
 '@
 
 # ====================== FINAL ======================

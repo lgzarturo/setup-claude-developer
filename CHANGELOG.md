@@ -13,6 +13,14 @@ and this project adheres to
 - Nuevos stacks tecnológicos en desarrollo.
 - Mejoras en la documentación.
 
+## [1.0.2] - 2026-04-19
+
+### Changed
+
+- Versión actualizada de 1.0.1 a 1.0.2.
+- Mejor soporte con los agentes de OpenCode.
+- Ya no se remplaza el contenido de CLAUDE.md
+
 ## [1.0.1] - 2026-04-19
 
 ### Added
@@ -34,7 +42,8 @@ and this project adheres to
   - token-savior: navegación + memoria (97% menos tokens)
   - caveman: respuestas concisas (~75% menos tokens)
   - CLAUDE.md optimizado: reglas anti-verbosidad (~63% menos tokens)
-- **Índice de documentación** (`docs/README.md`) con flujo completo de desarrollo.
+- **Índice de documentación** (`docs/README.md`) con flujo completo de
+  desarrollo.
 
 ### Documentation
 
@@ -87,6 +96,8 @@ and this project adheres to
 - `.vscode/settings.json` y `.vscode/extensions.json` para VS Code.
 
 [Unreleased]:
-  https://github.com/lgzarturo/setup-claude-developer/compare/v1.0.1...HEAD
+  https://github.com/lgzarturo/setup-claude-developer/compare/v1.0.2...HEAD
+[1.0.2]:
+  https://github.com/lgzarturo/setup-claude-developer/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/lgzarturo/setup-claude-developer/releases/tag/v1.0.1
 [1.0.0]: https://github.com/lgzarturo/setup-claude-developer/releases/tag/v1.0.0

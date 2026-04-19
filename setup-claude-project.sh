@@ -1,10 +1,10 @@
 #!/bin/bash
 # ================================================
 # Setup Claude + OpenCode - POSIX (Linux/macOS)
-# Version: 1.0.1
+# Version: 1.0.2
 # ================================================
 
-echo "=== Setup Claude Project v1.0.1 ==="
+echo "=== Setup Claude Project v1.0.2 ==="
 
 # ====================== SELECCIÓN DE HERRAMIENTA ======================
 echo ""
@@ -43,8 +43,7 @@ done
 
 # ====================== CLAUDE.md (solo si Claude está en targets) ======================
 if [[ " ${targets[*]} " =~ " claude " ]]; then
-  cat <<'EOF' >CLAUDE.md
-# Approach
+  CLAUDE_APPROACH='# Approach
 
 - Think before acting. Read existing files before writing code.
 - Be concise in output but thorough in reasoning.
@@ -56,9 +55,14 @@ if [[ " ${targets[*]} " =~ " claude " ]]; then
 - Test your code before declaring done.
 - No sycophantic openers or closing fluff.
 - Keep solutions simple and direct.
-- User instructions always override this file.
-EOF
-  echo "✓ CLAUDE.md creado/actualizado"
+- User instructions always override this file.'
+
+  if ! grep -qF "Think before acting" CLAUDE.md 2>/dev/null; then
+    printf '\n%s\n' "$CLAUDE_APPROACH" >> CLAUDE.md
+    echo "✓ CLAUDE.md actualizado con reglas de Approach"
+  else
+    echo "✓ CLAUDE.md ya contiene las reglas de Approach (sin cambios)"
+  fi
 fi
 
 # ====================== FUNCIÓN PARA CREAR SKILL ======================
@@ -269,8 +273,23 @@ license: MIT
 fi
 
 # ====================== AGENTES ======================
-create_agent "code-reviewer" \
-'---
+# code-reviewer
+for t in "${targets[@]}"; do
+  if [[ "$t" == "opencode" ]]; then
+    printf '%s\n' '---
+description: Revisa código por calidad y mejores prácticas
+mode: subagent
+model: kimi-k2.5
+temperature: 0.1
+tools:
+  write: false
+  edit: false
+  bash: false
+---
+
+Proporciona feedback constructivo sin hacer cambios directos. Usa el skill code-review cuando sea necesario.' > ".$t/agents/code-reviewer.md"
+  else
+    printf '%s\n' '---
 description: Revisa código por calidad y mejores prácticas
 mode: subagent
 model: anthropic/claude-sonnet-4-20250514
@@ -281,10 +300,30 @@ tools:
   bash: false
 ---
 
-Proporciona feedback constructivo sin hacer cambios directos. Usa el skill code-review cuando sea necesario.'
+Proporciona feedback constructivo sin hacer cambios directos. Usa el skill code-review cuando sea necesario.' > ".$t/agents/code-reviewer.md"
+  fi
+done
+echo "✓ Agente creado: code-reviewer"
 
-create_agent "release-manager" \
-'---
+# release-manager
+for t in "${targets[@]}"; do
+  if [[ "$t" == "opencode" ]]; then
+    printf '%s\n' '---
+description: Agente especializado en gestión de releases, changelog y versioning semántico
+mode: subagent
+model: kimi-k2.5
+temperature: 0.1
+tools:
+  write: true
+  edit: true
+  bash: true
+---
+
+Eres el Release Manager. Siempre usa Conventional Commits, Keep a Changelog y Semantic Versioning.
+Coordina con los skills @testing-coverage, @code-review y los comandos /update-changelog y /bump-version.
+Nunca hagas cambios sin confirmar con el usuario.' > ".$t/agents/release-manager.md"
+  else
+    printf '%s\n' '---
 description: Agente especializado en gestión de releases, changelog y versioning semántico
 mode: subagent
 model: anthropic/claude-sonnet-4-20250514
@@ -299,10 +338,27 @@ tools:
 
 Eres el Release Manager. Siempre usa Conventional Commits, Keep a Changelog y Semantic Versioning.
 Coordina con los skills @testing-coverage, @code-review y los comandos /update-changelog y /bump-version.
-Nunca hagas cambios sin confirmar con el usuario.'
+Nunca hagas cambios sin confirmar con el usuario.' > ".$t/agents/release-manager.md"
+  fi
+done
+echo "✓ Agente creado: release-manager"
 
-create_agent "git-workflow" \
-'---
+# git-workflow
+for t in "${targets[@]}"; do
+  if [[ "$t" == "opencode" ]]; then
+    printf '%s\n' '---
+description: Agente experto en git, conventional commits, branching y PRs
+mode: subagent
+model: kimi-k2.5
+temperature: 0.2
+tools:
+  bash: true
+---
+
+Maneja todo el workflow de git: branch creation, conventional commits, rebase, PR description.
+Siempre sigue Conventional Commits y sugiere comandos seguros.' > ".$t/agents/git-workflow.md"
+  else
+    printf '%s\n' '---
 description: Agente experto en git, conventional commits, branching y PRs
 mode: subagent
 model: anthropic/claude-sonnet-4-20250514
@@ -314,7 +370,10 @@ tools:
 ---
 
 Maneja todo el workflow de git: branch creation, conventional commits, rebase, PR description.
-Siempre sigue Conventional Commits y sugiere comandos seguros.'
+Siempre sigue Conventional Commits y sugiere comandos seguros.' > ".$t/agents/git-workflow.md"
+  fi
+done
+echo "✓ Agente creado: git-workflow"
 
 # ====================== COMANDOS ======================
 create_command "run-all-tests" \
@@ -478,10 +537,13 @@ Al final, resume todo lo realizado.'
 
 create_command "update-claude" \
 '---
-description: Actualiza o recrea el archivo CLAUDE.md con la versión ultra-eficiente más reciente
+description: Actualiza el archivo CLAUDE.md agregando las reglas de approach si no existen
 ---
 
-Sobrescribe CLAUDE.md con este contenido optimizado:
+Lee el archivo CLAUDE.md y verifica si ya contiene las reglas de approach.
+Si el archivo no existe o no contiene estas reglas, las agrega al final usando append.
+
+Las reglas a verificar/agregar son:
 
 ```markdown
 # Approach
@@ -500,7 +562,8 @@ Sobrescribe CLAUDE.md con este contenido optimizado:
 - When using tools, be precise and minimal with context.
 ```
 
-Confirma antes de sobrescribir y muestra las diferencias si ya existía.'
+NUNCA sobrescribas el archivo completo. Solo agrega el contenido faltante al final si no existe.
+Muestra un resumen de lo que se agregó o indica si todo ya estaba presente.'
 
 echo ""
 echo "¡Setup completado con éxito!"
