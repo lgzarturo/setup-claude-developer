@@ -1,0 +1,115 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ── Instalación ────────────────────────────────────────────────────────
+    {
+      "label": "make: install",
+      "detail": "Instala setup-claude-project en ~/.local/bin",
+      "type": "shell",
+      "command": "make install",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "make: uninstall",
+      "detail": "Elimina el script instalado de ~/.local/bin",
+      "type": "shell",
+      "command": "make uninstall",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "make: update",
+      "detail": "Actualiza el script instalado con la versión actual del repo",
+      "type": "shell",
+      "command": "make update",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ── Ejecución ──────────────────────────────────────────────────────────
+    {
+      "label": "make: run",
+      "detail": "Ejecuta el script en el directorio actual (sin instalar)",
+      "type": "shell",
+      "command": "make run",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ── Diagnóstico ────────────────────────────────────────────────────────
+    {
+      "label": "make: check",
+      "detail": "Verifica dependencias (bash, git)",
+      "type": "shell",
+      "command": "make check",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "make: status",
+      "detail": "Muestra si el script está instalado y disponible en PATH",
+      "type": "shell",
+      "command": "make status",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ── Lint / Validación ──────────────────────────────────────────────────
+    {
+      "label": "shellcheck: lint bash",
+      "detail": "Analiza setup-claude-project.sh con shellcheck",
+      "type": "shell",
+      "command": "shellcheck --shell=bash --severity=style setup-claude-project.sh",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      // Detecta errores SC#### de shellcheck como problems en el editor
+      "problemMatcher": {
+        "owner": "shellcheck",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.+):(\\d+):(\\d+):\\s+(note|style|info|warning|error):\\s+(.+)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  // Extensiones recomendadas para este proyecto.
+  // VS Code las sugerirá automáticamente al abrir el workspace.
+  "recommendations": [
+    // ── Shell scripting ────────────────────────────────────────────────────
+    "timonwong.shellcheck", // Análisis estático (linting) de bash/sh
+    "foxundermoon.shell-format", // Formateador con shfmt
+    "mads-hartmann.bash-ide-vscode", // Autocompletado y go-to-definition en bash
+
+    // ── PowerShell ─────────────────────────────────────────────────────────
+    "ms-vscode.powershell", // Soporte completo para .ps1 + PSScriptAnalyzer
+
+    // ── Makefile ───────────────────────────────────────────────────────────
+    "ms-vscode.makefile-tools", // Syntax highlight, IntelliSense, run targets
+
+    // ── Markdown / Docs ────────────────────────────────────────────────────
+    "davidanson.vscode-markdownlint", // Linting de README, CONTRIBUTING, SKILL.md
+    "yzhang.markdown-all-in-one", // Preview, shortcuts, TOC automático
+
+    // ── YAML — frontmatter de skills y agentes ─────────────────────────────
+    "redhat.vscode-yaml", // Validación y autocompletado de frontmatter
+    "remcohaszing.schemastore", // Schemas JSON/YAML automáticos vía SchemaStore
+
+    // ── Formato general ────────────────────────────────────────────────────
+    "editorconfig.editorconfig", // Aplica reglas de .editorconfig si existe
+    "esbenp.prettier-vscode", // Formateador para JSON, Markdown
+
+    // ── Git ────────────────────────────────────────────────────────────────
+    "eamodio.gitlens", // Blame, historial, comparación de ramas
+
+    // ── Utilidades ─────────────────────────────────────────────────────────
+    "streetsidesoftware.code-spell-checker", // Corrector ortográfico
+    "streetsidesoftware.code-spell-checker-language-es" // Diccionario español
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  // ── Editor general ──────────────────────────────────────────────────────
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.rulers": [100],
+  "editor.renderWhitespace": "boundary",
+
+  // ── Archivos ────────────────────────────────────────────────────────────
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+  "files.associations": {
+    "**/skills/*/SKILL.md": "markdown",
+    "**/agents/*.md": "markdown",
+    "**/commands/*.md": "markdown"
+  },
+
+  // ── Shell scripting ─────────────────────────────────────────────────────
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+  // shfmt: 2 espacios, simplificar condiciones, operadores binarios al inicio de línea
+  "shellformat.flag": "-i 2 -s -bn",
+  "shellformat.effectLanguages": ["shellscript"],
+
+  // shellcheck: feedback mientras escribes, no solo al guardar
+  "shellcheck.enable": true,
+  "shellcheck.run": "onType",
+  "shellcheck.executablePath": "shellcheck",
+  "shellcheck.customArgs": ["--shell=bash", "--severity=style"],
+
+  // ── PowerShell ──────────────────────────────────────────────────────────
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell",
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true
+  },
+  "powershell.scriptAnalysis.enable": true,
+  "powershell.codeFormatting.preset": "OTBS",
+
+  // ── Markdown ────────────────────────────────────────────────────────────
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": false
+  },
+  "markdownlint.config": {
+    "MD013": {
+      "line_length": 120,
+      "heading_line_length": 80,
+      "code_block_line_length": 120,
+      "tables": false
+    },
+    "MD024": { "siblings_only": true },
+    "MD033": false
+  },
+
+  // ── YAML / JSON ─────────────────────────────────────────────────────────
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "yaml.format.enable": true,
+  "yaml.validate": true,
+  "yaml.completion": true,
+
+  // ── Makefile ────────────────────────────────────────────────────────────
+  // No escanear el Makefile automáticamente al abrir — evita prompts molestos
+  "makefile.configureOnOpen": false,
+
+  // ── Corrector ortográfico (EN + ES) ─────────────────────────────────────
+  "cSpell.language": "en,es",
+  "cSpell.words": [
+    "opencode", "shellcheck", "shfmt", "testcontainers",
+    "pydantic", "sqlalchemy", "fastapi", "tanstack",
+    "nextjs", "pytest", "kotest", "subagent", "frontmatter",
+    "POSIX", "OTBS", "PSScriptAnalyzer"
+  ],
+
+  // ── Git ─────────────────────────────────────────────────────────────────
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "gitlens.hovers.currentLine.over": "line",
+
+  // ── Terminal ────────────────────────────────────────────────────────────
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.osx": "bash"
+}

@@ -1,0 +1,52 @@
+# Authors
+
+## Original Author
+
+**Arturo López** ([@lgzarturo](https://github.com/lgzarturo))
+
+- 🌐 GitHub: https://github.com/lgzarturo
+- 📧 Email: [Contactar vía GitHub](https://github.com/lgzarturo)
+
+### Sobre el Autor
+
+Arturo López es un desarrollador de software apasionado por la automatización, las buenas prácticas de desarrollo y las herramientas que mejoran la productividad de los equipos de desarrollo. Este proyecto nace de la necesidad de estandarizar y simplificar la configuración de entornos de desarrollo con IA asistida usando Claude Code y OpenCode.
+
+---
+
+## Contributors
+
+Agradecemos a todas las personas que han contribuido a este proyecto:
+
+<!-- Añade contribuyentes aquí en orden cronológico -->
+
+<!-- Template para contribuyentes:
+- **[@username](https://github.com/username)** - Descripción de la contribución (feat/fix/docs)
+-->
+
+---
+
+## Cómo aparecer en esta lista
+
+Para ser añadido a esta lista de contribuyentes:
+
+1. Realiza una contribución significativa al proyecto (código, documentación, testing)
+2. Asegúrate de que tu PR sea mergeado
+3. Tu nombre aparecerá automáticamente en futuras actualizaciones de este archivo
+
+Alternativamente, puedes añadirte tú mismo en tu PR siguiendo el formato del template arriba.
+
+---
+
+## Agradecimientos Especiales
+
+Este proyecto utiliza o se inspira en:
+
+- [Claude Code](https://claude.ai/code) - Herramienta de codificación asistida por IA de Anthropic
+- [OpenCode](https://opencode.ai/) - Alternativa open source a Claude Code
+- La comunidad open source que comparte conocimientos y mejores prácticas
+
+---
+
+<div align="center">
+  <strong>¿Quieres contribuir? Revisa <a href="CONTRIBUTING.md">CONTRIBUTING.md</a></strong>
+</div>
