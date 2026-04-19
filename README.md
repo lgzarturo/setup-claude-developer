@@ -10,7 +10,7 @@ agentes y comandos personalizados según el stack tecnológico que elijas.
 
 ```bash
 # 1. Clona este repositorio
-git clone https://github.com/tu-usuario/setup-claude-developer.git
+git clone https://github.com/lgzarturo/setup-claude-developer.git
 cd setup-claude-developer
 
 # 2. Instala el script globalmente
@@ -34,7 +34,7 @@ setup-claude-project
 
 ```powershell
 # Descarga el script en el directorio de tu proyecto
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/tu-usuario/setup-claude-developer/main/setup-claude-project.ps1" -OutFile "setup-claude-project.ps1"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/lgzarturo/setup-claude-developer/main/setup-claude-project.ps1" -OutFile "setup-claude-project.ps1"
 
 # Configura permisos si es necesario
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
