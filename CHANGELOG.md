@@ -13,6 +13,40 @@ and this project adheres to
 - Nuevos stacks tecnológicos en desarrollo.
 - Mejoras en la documentación.
 
+## [1.0.1] - 2026-04-19
+
+### Added
+
+- **Documentación de skills** (`docs/01-skills.md`) con checklist de 42 skills:
+  - 9 skills implementados (4 universales + 5 por stack)
+  - 18 skills oficiales de Spring Boot (integración externa)
+  - 15 skills recomendados para desarrollo futuro
+- **Documentación de agents** (`docs/02-agents.md`) con 12 agents:
+  - 1 agent implementado (`code-reviewer`)
+  - 11 agents recomendados por fase de desarrollo
+- **Documentación de commands** (`docs/03-commands.md`) con 17 commands:
+  - 1 command implementado (`/run-all-tests`)
+  - 16 commands recomendados por fase de desarrollo
+- **Documentación de recomendaciones** (`docs/04-recomendaciones.md`) con 5
+  herramientas para optimizar tokens y performance:
+  - RTK: compresión de bash (60-90% ahorro)
+  - code-review-graph: grafo de conocimiento (6.8x-49x menos tokens)
+  - token-savior: navegación + memoria (97% menos tokens)
+  - caveman: respuestas concisas (~75% menos tokens)
+  - CLAUDE.md optimizado: reglas anti-verbosidad (~63% menos tokens)
+- **Índice de documentación** (`docs/README.md`) con flujo completo de desarrollo.
+
+### Documentation
+
+- README.md actualizado con sección "Recomendaciones para Desarrolladores".
+- CODE_OF_CONDUCT.md actualizado con referencias correctas a MIT License.
+
+### Changed
+
+- `.editorconfig`: línea máxima de 80 caracteres para archivos Markdown.
+- `.prettierrc`: `proseWrap: "always"` para formateo automático de Markdown.
+- `.vscode/settings.json`: rulers en [80, 100] y markdownlint con 80 caracteres.
+
 ## [1.0.0] - 2026-04-19
 
 ### Added
@@ -53,5 +87,6 @@ and this project adheres to
 - `.vscode/settings.json` y `.vscode/extensions.json` para VS Code.
 
 [Unreleased]:
-  https://github.com/lgzarturo/setup-claude-developer/compare/v1.0.0...HEAD
+  https://github.com/lgzarturo/setup-claude-developer/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/lgzarturo/setup-claude-developer/releases/tag/v1.0.1
 [1.0.0]: https://github.com/lgzarturo/setup-claude-developer/releases/tag/v1.0.0

@@ -15,6 +15,7 @@ SCRIPT_NAME  := setup-claude-project
 SCRIPT_SRC   := $(SCRIPT_NAME).sh
 INSTALL_DIR  := $(HOME)/.local/bin
 INSTALL_PATH := $(INSTALL_DIR)/$(SCRIPT_NAME)
+VERSION_FILE := VERSION
 
 # Colores para output
 CYAN  := \033[36m
@@ -99,11 +100,12 @@ run: ## Ejecuta el script en el directorio actual (sin instalar)
 	@bash $(SCRIPT_SRC)
 
 # -----------------------------------------------------------------------------
-# update — actualiza el script instalado con la versión actual del repo.
-# Equivalente a reinstalar sobre la versión anterior.
+# update — fuerza la actualización sin verificar versiones.
+# Equivalente a reinstalar sobre la versión anterior (siempre sobreescribe).
+# Para actualización inteligente usa: make upgrade
 # -----------------------------------------------------------------------------
 .PHONY: update
-update: ## Actualiza el script instalado con la versión actual del repo
+update: ## Fuerza actualización del script instalado (sin verificar versión)
 	@test -f $(INSTALL_PATH) || { \
 		printf "$(YELLOW)Script no instalado. Usa 'make install' primero.$(RESET)\n"; exit 1; }
 	@cp $(SCRIPT_SRC) $(INSTALL_PATH)
@@ -111,7 +113,81 @@ update: ## Actualiza el script instalado con la versión actual del repo
 	@printf "$(GREEN)✓ Script actualizado en $(INSTALL_PATH)$(RESET)\n"
 
 # -----------------------------------------------------------------------------
-# status — muestra si el script está instalado y su versión de PATH
+# version — muestra la versión del repo y la del script instalado.
+# Indica si hay una actualización disponible o si ya está al día.
+#
+# Fuente de verdad:
+#   Repo     → archivo VERSION en la raíz del repositorio
+#   Instalado → línea "# Version: X.Y.Z" en el binario instalado
+# -----------------------------------------------------------------------------
+.PHONY: version
+version: ## Muestra versión del repo e instalada, e indica si hay actualización
+	@REPO_VER=$$(cat $(VERSION_FILE) 2>/dev/null || echo "desconocida"); \
+	if test -f $(INSTALL_PATH); then \
+		INST_VER=$$(grep -m1 '^# Version:' $(INSTALL_PATH) | sed 's/# Version: *//'); \
+		INST_VER=$${INST_VER:-desconocida}; \
+	else \
+		INST_VER="no instalado"; \
+	fi; \
+	printf "$(CYAN)Versiones:$(RESET)\n"; \
+	printf "  Repositorio: $(GREEN)v$$REPO_VER$(RESET)\n"; \
+	printf "  Instalado:   "; \
+	if [ "$$INST_VER" = "no instalado" ]; then \
+		printf "$(RED)no instalado$(RESET)\n"; \
+	else \
+		printf "$(GREEN)v$$INST_VER$(RESET)\n"; \
+	fi; \
+	printf "\n"; \
+	if [ "$$INST_VER" = "no instalado" ]; then \
+		printf "  $(YELLOW)→ Ejecuta 'make install' para instalar v$$REPO_VER$(RESET)\n\n"; \
+	elif [ "$$REPO_VER" = "$$INST_VER" ]; then \
+		printf "  $(GREEN)✓ Ya estás en la última versión$(RESET)\n\n"; \
+	else \
+		LATEST=$$(printf '%s\n' "$$REPO_VER" "$$INST_VER" | sort -V | tail -n1); \
+		if [ "$$LATEST" = "$$REPO_VER" ]; then \
+			printf "  $(YELLOW)↑ Actualización disponible: v$$INST_VER → v$$REPO_VER$(RESET)\n"; \
+			printf "  $(CYAN)  Ejecuta 'make upgrade' para actualizar$(RESET)\n\n"; \
+		else \
+			printf "  $(YELLOW)⚠ La versión instalada (v$$INST_VER) es más nueva que el repo (v$$REPO_VER)$(RESET)\n\n"; \
+		fi; \
+	fi
+
+# -----------------------------------------------------------------------------
+# upgrade — actualiza solo si la versión del repo es superior a la instalada.
+# Compara versiones semánticas (X.Y.Z) usando sort -V.
+#
+#   v1.0.0 → v1.0.1  → actualiza ✓
+#   v1.0.1 → v1.0.1  → ya actualizado, no hace nada
+#   v1.0.2 → v1.0.1  → versión instalada más nueva, aborta con aviso
+# -----------------------------------------------------------------------------
+.PHONY: upgrade
+upgrade: ## Actualiza solo si hay versión superior disponible en el repo
+	@test -f $(SCRIPT_SRC) || { \
+		printf "$(RED)ERROR: $(SCRIPT_SRC) no encontrado$(RESET)\n"; exit 1; }
+	@test -f $(INSTALL_PATH) || { \
+		printf "$(YELLOW)Script no instalado. Usa 'make install' primero.$(RESET)\n"; exit 1; }
+	@REPO_VER=$$(cat $(VERSION_FILE) 2>/dev/null || echo "0.0.0"); \
+	INST_VER=$$(grep -m1 '^# Version:' $(INSTALL_PATH) | sed 's/# Version: *//'); \
+	INST_VER=$${INST_VER:-0.0.0}; \
+	printf "$(CYAN)Verificando versiones...$(RESET)\n"; \
+	printf "  Instalada:   v$$INST_VER\n"; \
+	printf "  Disponible:  v$$REPO_VER\n\n"; \
+	if [ "$$REPO_VER" = "$$INST_VER" ]; then \
+		printf "$(GREEN)✓ Ya estás en la última versión (v$$INST_VER). No es necesario actualizar.$(RESET)\n\n"; \
+		exit 0; \
+	fi; \
+	LATEST=$$(printf '%s\n' "$$REPO_VER" "$$INST_VER" | sort -V | tail -n1); \
+	if [ "$$LATEST" != "$$REPO_VER" ]; then \
+		printf "$(YELLOW)⚠ La versión instalada (v$$INST_VER) ya es más reciente que el repo (v$$REPO_VER).$(RESET)\n"; \
+		printf "$(YELLOW)  Usa 'make update' si de todos modos quieres sobreescribir.$(RESET)\n\n"; \
+		exit 1; \
+	fi; \
+	cp $(SCRIPT_SRC) $(INSTALL_PATH); \
+	chmod +x $(INSTALL_PATH); \
+	printf "$(GREEN)✓ Actualizado: v$$INST_VER → v$$REPO_VER$(RESET)\n\n"
+
+# -----------------------------------------------------------------------------
+# status — muestra si el script está instalado y disponible en PATH
 # -----------------------------------------------------------------------------
 .PHONY: status
 status: ## Muestra si el script está instalado y disponible en PATH

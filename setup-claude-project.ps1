@@ -1,9 +1,9 @@
 # ================================================
 # Setup Claude + OpenCode - Windows 11 PowerShell
-# Version: 1.0.0
+# Version: 1.0.1
 # ================================================
 
-Write-Host "=== Setup Claude Project v1.0.0 ===" -ForegroundColor Cyan
+Write-Host "=== Setup Claude Project v1.0.1 ===" -ForegroundColor Cyan
 
 # ====================== SELECCIÓN DE HERRAMIENTA ======================
 Write-Host ""

@@ -1,10 +1,10 @@
 #!/bin/bash
 # ================================================
 # Setup Claude + OpenCode - POSIX (Linux/macOS)
-# Version: 1.0.0
+# Version: 1.0.1
 # ================================================
 
-echo "=== Setup Claude Project v1.0.0 ==="
+echo "=== Setup Claude Project v1.0.1 ==="
 
 # ====================== SELECCIÓN DE HERRAMIENTA ======================
 echo ""
